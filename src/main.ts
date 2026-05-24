@@ -2,17 +2,20 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
-import { QueryFailedFilter } from './filters/query-failed.filter';
 import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Increase payload size limit to support Base64 rich text/images from editor
+  // =========================
+  // 1. BODY SIZE LIMIT (for images/base64)
+  // =========================
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ limit: '50mb', extended: true }));
 
-  // Configure Helmet with relaxed cross-origin settings so frontend can load static uploaded assets from backend
+  // =========================
+  // 2. SECURITY HEADERS
+  // =========================
   app.use(
     helmet({
       crossOriginResourcePolicy: { policy: 'cross-origin' },
@@ -20,13 +23,35 @@ async function bootstrap() {
     }),
   );
 
-  // Configure CORS
+  // =========================
+  // 3. CORS CONFIG (PRODUCTION SAFE)
+  // =========================
+  const allowedOrigins = [
+    'https://pinrwanda.netlify.app',
+    'http://localhost:3000',
+  ];
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || '*',
+    origin: (origin, callback) => {
+      // allow server-to-server or Postman
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+        return callback(null, true);
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+      return callback(new Error('CORS blocked: Not allowed origin'));
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
+  // =========================
+  // 4. VALIDATION PIPE
+  // =========================
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -34,8 +59,12 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new QueryFailedFilter());
+  // =========================
+  // 5. START SERVER
+  // =========================
+  const port = process.env.PORT || 3002;
+  await app.listen(port);
 
-  await app.listen(process.env.PORT ?? 3002);
+  console.log(`🚀 Server running on port ${port}`);
 }
 bootstrap();
