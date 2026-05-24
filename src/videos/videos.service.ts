@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Video } from "../entities/video.entity";
@@ -53,7 +53,7 @@ export class VideosService {
     const channelId = process.env.YOUTUBE_CHANNEL_ID;
     
     if (!apiKey || !channelId) {
-      throw new Error("Missing YouTube API credentials in environment variables.");
+      throw new BadRequestException("Missing YouTube API credentials in environment variables. Please configure YOUTUBE_API_KEY and YOUTUBE_CHANNEL_ID.");
     }
 
     const axios = require('axios');
@@ -91,8 +91,10 @@ export class VideosService {
       }
       return { message: "Sync successful", count: addedCount };
     } catch (error) {
+      const errorMsg = error.response?.data?.error?.message || error.message;
       console.error("YouTube Sync Error:", error.response?.data || error.message);
-      throw new Error("Failed to sync from YouTube.");
+      throw new InternalServerErrorException(`YouTube Sync Failed: ${errorMsg}`);
     }
   }
 }
+

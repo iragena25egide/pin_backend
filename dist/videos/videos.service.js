@@ -55,7 +55,7 @@ let VideosService = class VideosService {
         const apiKey = process.env.YOUTUBE_API_KEY;
         const channelId = process.env.YOUTUBE_CHANNEL_ID;
         if (!apiKey || !channelId) {
-            throw new Error("Missing YouTube API credentials in environment variables.");
+            throw new common_1.BadRequestException("Missing YouTube API credentials in environment variables. Please configure YOUTUBE_API_KEY and YOUTUBE_CHANNEL_ID.");
         }
         const axios = require('axios');
         const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=50`;
@@ -87,8 +87,9 @@ let VideosService = class VideosService {
             return { message: "Sync successful", count: addedCount };
         }
         catch (error) {
+            const errorMsg = error.response?.data?.error?.message || error.message;
             console.error("YouTube Sync Error:", error.response?.data || error.message);
-            throw new Error("Failed to sync from YouTube.");
+            throw new common_1.InternalServerErrorException(`YouTube Sync Failed: ${errorMsg}`);
         }
     }
 };
