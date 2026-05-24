@@ -1,0 +1,30 @@
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+} from 'typeorm';
+
+@Entity('contact_messages')
+export class ContactMessage {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  subject: string;
+
+  @Column({ type: 'text' })
+  message: string;
+
+  @Column({ default: false })
+  is_read: boolean;
+
+  @CreateDateColumn()
+  created_at: Date;
+}
