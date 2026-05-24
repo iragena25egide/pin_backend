@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
   // DATABASE CONNECTION (Neon OR Local)
   ...(useUrl
     ? {
-        url: process.env.DB_URL,
+        url: process.env.DATABASE_URL,
       }
     : {
         host: process.env.DB_HOST || 'localhost',
