@@ -24,7 +24,8 @@ export class UploadsController {
     }
     
     // In production, the APP_URL env variable should be used
-    const baseUrl = process.env.APP_URL || 'http://localhost:3001';
+    const baseUrl = process.env.APP_URL || 'https://pin-backend-yz2u.onrender.com';
     return { url: `${baseUrl}/uploads/${file.filename}` };
   }
+
 }

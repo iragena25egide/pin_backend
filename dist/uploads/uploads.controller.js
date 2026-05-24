@@ -23,7 +23,7 @@ let UploadsController = class UploadsController {
         if (!file) {
             throw new common_1.BadRequestException('No file provided');
         }
-        const baseUrl = process.env.APP_URL || 'http://localhost:3001';
+        const baseUrl = process.env.APP_URL || 'https://pin-backend-yz2u.onrender.com';
         return { url: `${baseUrl}/uploads/${file.filename}` };
     }
 };

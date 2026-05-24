@@ -7,7 +7,6 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const common_1 = require("@nestjs/common");
 const helmet_1 = __importDefault(require("helmet"));
-const query_failed_filter_1 = require("./filters/query-failed.filter");
 const express_1 = require("express");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
@@ -17,8 +16,19 @@ async function bootstrap() {
         crossOriginResourcePolicy: { policy: 'cross-origin' },
         contentSecurityPolicy: false,
     }));
+    const allowedOrigins = [
+        'https://pinrwanda.netlify.app',
+        'http://localhost:3000',
+    ];
     app.enableCors({
-        origin: process.env.FRONTEND_URL || '*',
+        origin: (origin, callback) => {
+            if (!origin)
+                return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error('CORS blocked: Not allowed origin'));
+        },
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
     });
@@ -26,8 +36,9 @@ async function bootstrap() {
         whitelist: true,
         transform: true,
     }));
-    app.useGlobalFilters(new query_failed_filter_1.QueryFailedFilter());
-    await app.listen(process.env.PORT ?? 3002);
+    const port = process.env.PORT || 3002;
+    await app.listen(port);
+    console.log(`🚀 Server running on port ${port}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

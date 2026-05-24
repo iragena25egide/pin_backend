@@ -51,7 +51,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     type: 'postgres',
     ...(useUrl
         ? {
-            url: process.env.DB_URL,
+            url: process.env.DATABASE_URL,
         }
         : {
             host: process.env.DB_HOST || 'localhost',
