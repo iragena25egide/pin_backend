@@ -18,7 +18,10 @@ async function bootstrap() {
     }));
     const allowedOrigins = [
         'https://pinrwanda.netlify.app',
+        'https://pinrwanda.com',
+        'https://www.pinrwanda.com',
         'http://localhost:3000',
+        'http://localhost:3001',
     ];
     app.enableCors({
         origin: (origin, callback) => {
