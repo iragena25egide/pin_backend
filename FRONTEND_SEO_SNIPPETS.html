@@ -1,0 +1,361 @@
+<!-- 
+  PIN RWANDA - Frontend SEO Optimization Snippets
+  Add these to your frontend HTML templates for better SEO
+-->
+
+<!-- ============================================ -->
+<!-- 1. BASE HTML HEAD - Add to all pages -->
+<!-- ============================================ -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>PIN Rwanda - Where Nothing is Hidden</title>
+  <meta name="title" content="PIN Rwanda - Where Nothing is Hidden">
+  <meta name="description" content="Latest news, videos, and updates from Rwanda. Covering politics, justice, sports, entertainment, and more.">
+  <meta name="keywords" content="Rwanda news, PIN Rwanda, amakuru, ubutabera, imikino, imyidagaduro, Rwanda videos">
+  <meta name="author" content="PIN Rwanda">
+  <meta name="language" content="Kinyarwanda">
+  <link rel="canonical" href="https://pinrwanda.com/rw">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pinrwanda.com/rw">
+  <meta property="og:title" content="PIN Rwanda - Where Nothing is Hidden">
+  <meta property="og:description" content="Latest news, videos, and updates from Rwanda">
+  <meta property="og:image" content="https://pinrwanda.com/pin.jpeg">
+  <meta property="og:site_name" content="PIN Rwanda">
+  <meta property="og:locale" content="rw_RW">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://pinrwanda.com/rw">
+  <meta name="twitter:title" content="PIN Rwanda - Where Nothing is Hidden">
+  <meta name="twitter:description" content="Latest news, videos, and updates from Rwanda">
+  <meta name="twitter:image" content="https://pinrwanda.com/pin.jpeg">
+  <meta name="twitter:site" content="@PINRWANDA">
+  <meta name="twitter:creator" content="@PINRWANDA">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/pin.jpeg">
+  <link rel="apple-touch-icon" href="/pin.jpeg">
+  
+  <!-- Sitemap & Robots -->
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+</head>
+
+
+<!-- ============================================ -->
+<!-- 2. ARTICLE/POST PAGE - Add to individual posts -->
+<!-- ============================================ -->
+<head>
+  <!-- ... base meta tags ... -->
+  
+  <!-- Article Specific -->
+  <title>{{post.title}} - PIN Rwanda</title>
+  <meta name="description" content="{{post.excerpt}}">
+  <link rel="canonical" href="https://pinrwanda.com/rw/post/{{post.slug}}">
+  
+  <!-- Open Graph Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://pinrwanda.com/rw/post/{{post.slug}}">
+  <meta property="og:title" content="{{post.title}}">
+  <meta property="og:description" content="{{post.excerpt}}">
+  <meta property="og:image" content="{{post.image}}">
+  <meta property="article:published_time" content="{{post.created_at}}">
+  <meta property="article:author" content="{{post.author}}">
+  <meta property="article:section" content="{{post.category}}">
+  
+  <!-- Twitter Article -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{post.title}}">
+  <meta name="twitter:description" content="{{post.excerpt}}">
+  <meta name="twitter:image" content="{{post.image}}">
+</head>
+
+<body>
+  <!-- Structured Data for Article -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "{{post.title}}",
+    "image": "{{post.image}}",
+    "datePublished": "{{post.created_at}}",
+    "dateModified": "{{post.created_at}}",
+    "author": {
+      "@type": "Person",
+      "name": "{{post.author}}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "PIN Rwanda",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://pinrwanda.com/pin.jpeg"
+      }
+    },
+    "description": "{{post.excerpt}}",
+    "articleBody": "{{post.content}}"
+  }
+  </script>
+</body>
+
+
+<!-- ============================================ -->
+<!-- 3. VIDEO PAGE - Add to individual videos -->
+<!-- ============================================ -->
+<head>
+  <!-- ... base meta tags ... -->
+  
+  <!-- Video Specific -->
+  <title>{{video.title}} - PIN Rwanda</title>
+  <meta name="description" content="{{video.description}}">
+  <link rel="canonical" href="https://pinrwanda.com/rw/video/{{video.slug}}">
+  
+  <!-- Open Graph Video -->
+  <meta property="og:type" content="video.other">
+  <meta property="og:url" content="https://pinrwanda.com/rw/video/{{video.slug}}">
+  <meta property="og:title" content="{{video.title}}">
+  <meta property="og:description" content="{{video.description}}">
+  <meta property="og:image" content="{{video.thumbnail}}">
+  <meta property="og:video" content="{{video.video_url}}">
+  
+  <!-- Twitter Video -->
+  <meta name="twitter:card" content="player">
+  <meta name="twitter:title" content="{{video.title}}">
+  <meta name="twitter:description" content="{{video.description}}">
+  <meta name="twitter:image" content="{{video.thumbnail}}">
+  <meta name="twitter:player" content="{{video.video_url}}">
+</head>
+
+<body>
+  <!-- Structured Data for Video -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "{{video.title}}",
+    "description": "{{video.description}}",
+    "thumbnailUrl": "{{video.thumbnail}}",
+    "uploadDate": "{{video.created_at}}",
+    "contentUrl": "{{video.video_url}}",
+    "embedUrl": "https://www.youtube.com/embed/{{video.youtube_video_id}}",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PIN Rwanda",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://pinrwanda.com/pin.jpeg"
+      }
+    }
+  }
+  </script>
+</body>
+
+
+<!-- ============================================ -->
+<!-- 4. CATEGORY PAGE - Add to category pages -->
+<!-- ============================================ -->
+<head>
+  <!-- ... base meta tags ... -->
+  
+  <title>{{category.name}} - PIN Rwanda</title>
+  <meta name="description" content="Latest {{category.name}} news and updates from PIN Rwanda">
+  <link rel="canonical" href="https://pinrwanda.com/rw/category/{{category.slug}}">
+  
+  <meta property="og:title" content="{{category.name}} - PIN Rwanda">
+  <meta property="og:description" content="Latest {{category.name}} news and updates">
+  <meta property="og:url" content="https://pinrwanda.com/rw/category/{{category.slug}}">
+</head>
+
+<body>
+  <!-- Structured Data for Category -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "{{category.name}}",
+    "description": "Latest {{category.name}} news from PIN Rwanda",
+    "url": "https://pinrwanda.com/rw/category/{{category.slug}}",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PIN Rwanda"
+    }
+  }
+  </script>
+</body>
+
+
+<!-- ============================================ -->
+<!-- 5. ORGANIZATION SCHEMA - Add to homepage -->
+<!-- ============================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PIN Rwanda",
+  "alternateName": "PIN TV Rwanda",
+  "url": "https://pinrwanda.com",
+  "logo": "https://pinrwanda.com/pin.jpeg",
+  "description": "Where Nothing is Hidden - Rwanda's leading news and media platform",
+  "email": "pintvrwanda@gmail.com",
+  "telephone": "+250789651100",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kigali",
+    "addressCountry": "RW"
+  },
+  "sameAs": [
+    "https://www.facebook.com/share/192i2iSLfh/",
+    "https://x.com/PINRWANDA",
+    "https://youtube.com/@pinrwanda"
+  ]
+}
+</script>
+
+
+<!-- ============================================ -->
+<!-- 6. WEBSITE SCHEMA - Add to homepage -->
+<!-- ============================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PIN Rwanda",
+  "url": "https://pinrwanda.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://pinrwanda.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
+<!-- ============================================ -->
+<!-- 7. BREADCRUMB SCHEMA - Add to all pages -->
+<!-- ============================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://pinrwanda.com/rw"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{category.name}}",
+      "item": "https://pinrwanda.com/rw/category/{{category.slug}}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{post.title}}",
+      "item": "https://pinrwanda.com/rw/post/{{post.slug}}"
+    }
+  ]
+}
+</script>
+
+
+<!-- ============================================ -->
+<!-- 8. ADDITIONAL SEO ENHANCEMENTS -->
+<!-- ============================================ -->
+
+<!-- Preconnect to external domains for faster loading -->
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<!-- DNS Prefetch -->
+<link rel="dns-prefetch" href="https://www.youtube.com">
+
+<!-- Alternate language versions (if you add English) -->
+<link rel="alternate" hreflang="rw" href="https://pinrwanda.com/rw">
+<link rel="alternate" hreflang="en" href="https://pinrwanda.com/en">
+<link rel="alternate" hreflang="x-default" href="https://pinrwanda.com">
+
+<!-- RSS Feed (if you implement one) -->
+<link rel="alternate" type="application/rss+xml" title="PIN Rwanda RSS Feed" href="https://pinrwanda.com/rss.xml">
+
+
+<!-- ============================================ -->
+<!-- 9. IMAGE OPTIMIZATION -->
+<!-- ============================================ -->
+
+<!-- Always include alt text for images -->
+<img 
+  src="{{image.url}}" 
+  alt="{{image.description}}"
+  width="800"
+  height="600"
+  loading="lazy"
+>
+
+<!-- Use responsive images -->
+<img 
+  src="{{image.url}}" 
+  srcset="{{image.url}}?w=400 400w, {{image.url}}?w=800 800w, {{image.url}}?w=1200 1200w"
+  sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
+  alt="{{image.description}}"
+  loading="lazy"
+>
+
+
+<!-- ============================================ -->
+<!-- 10. PERFORMANCE HINTS -->
+<!-- ============================================ -->
+
+<!-- Preload critical resources -->
+<link rel="preload" href="/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/css/critical.css" as="style">
+
+<!-- Async load non-critical CSS -->
+<link rel="stylesheet" href="/css/main.css" media="print" onload="this.media='all'">
+
+
+<!-- ============================================ -->
+<!-- IMPLEMENTATION NOTES -->
+<!-- ============================================ -->
+
+<!--
+  TEMPLATE VARIABLES TO REPLACE:
+  - {{post.title}} - Post title from database
+  - {{post.slug}} - Post URL slug
+  - {{post.excerpt}} - Post excerpt/summary
+  - {{post.content}} - Full post content
+  - {{post.image}} - Post featured image URL
+  - {{post.author}} - Post author name
+  - {{post.category}} - Post category
+  - {{post.created_at}} - Post creation date (ISO format)
+  
+  - {{video.title}} - Video title
+  - {{video.slug}} - Video URL slug
+  - {{video.description}} - Video description
+  - {{video.thumbnail}} - Video thumbnail URL
+  - {{video.video_url}} - Video file URL
+  - {{video.youtube_video_id}} - YouTube video ID
+  - {{video.created_at}} - Video upload date
+  
+  - {{category.name}} - Category display name
+  - {{category.slug}} - Category URL slug
+  
+  TESTING:
+  1. Use Google's Rich Results Test: https://search.google.com/test/rich-results
+  2. Use Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
+  3. Use Twitter Card Validator: https://cards-dev.twitter.com/validator
+  4. Use Schema.org Validator: https://validator.schema.org/
+  
+  PRIORITY:
+  1. Add base meta tags to all pages (Section 1)
+  2. Add article schema to posts (Section 2)
+  3. Add video schema to videos (Section 3)
+  4. Add organization schema to homepage (Section 5)
+  5. Add breadcrumbs (Section 7)
+-->

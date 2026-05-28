@@ -23,6 +23,7 @@ import { ContactMessagesModule } from './contact-messages/contact-messages.modul
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { UploadsModule } from './uploads/uploads.module';
+import { SitemapModule } from './sitemap/sitemap.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -59,6 +60,7 @@ import { join } from 'path';
     ContactMessagesModule,
     SubscribersModule,
     UploadsModule,
+    SitemapModule,
   ],
   controllers: [AppController],
   providers: [AppService],
