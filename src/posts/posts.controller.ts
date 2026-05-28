@@ -15,8 +15,11 @@ export class PostsController {
   }
 
   @Get()
-  findAll(@Query("category") category?: string) {
-    return this.service.findAll(category);
+  findAll(
+    @Query("category") category?: string,
+    @Query("language") language?: string,
+  ) {
+    return this.service.findAll(category, language);
   }
 
   @Get("slug/:slug")

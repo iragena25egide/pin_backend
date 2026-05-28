@@ -8,4 +8,5 @@ export class CreatePostDto {
   @IsOptional() @IsBoolean() is_featured?: boolean;
   @IsOptional() @IsString() slug?: string;
   @IsOptional() @IsString() author?: string;
+  @IsOptional() @IsString() language?: string;
 }

@@ -42,4 +42,6 @@ export class Post {
 
   @CreateDateColumn()
   created_at: Date;
+
+  language?: string;
 }
