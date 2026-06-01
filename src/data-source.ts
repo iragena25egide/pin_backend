@@ -32,10 +32,9 @@ export const AppDataSource = new DataSource({
         database: process.env.DB_NAME,
       }),
 
-  // SSL CONFIG (FIXED)
-  ssl: useUrl
-    ? { rejectUnauthorized: false } // Neon / cloud DB
-    : false, // local postgres
+  // SSL CONFIG — rejectUnauthorized:false is sufficient for Supabase pooler
+  // uselibpqcompat=true in the DATABASE_URL handles the sslmode behaviour
+  ssl: useUrl ? { rejectUnauthorized: false } : false,
 
   synchronize: false, // NEVER use true in production
   logging: !isProduction,

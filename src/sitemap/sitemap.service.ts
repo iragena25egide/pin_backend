@@ -71,7 +71,7 @@ export class SitemapService {
     }));
 
     // Combine all URLs
-    const allPages = [
+    const allPages: { url: string; priority: string; changefreq: string; lastmod?: Date | string }[] = [
       ...staticPages,
       ...categoryPages,
       ...postPages,
