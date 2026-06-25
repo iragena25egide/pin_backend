@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, Req, Query, UseGuards } from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
 import { Request } from 'express';
 
@@ -17,7 +17,7 @@ export class AnalyticsController {
 
   // Ideally this is protected by an AdminGuard, omitting for basic integration
   @Get('dashboard')
-  async getDashboard() {
-    return this.analyticsService.getDashboardStats();
+  async getDashboard(@Query('date') date?: string) {
+    return this.analyticsService.getDashboardStats(date);
   }
 }
