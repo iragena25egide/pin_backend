@@ -31,7 +31,7 @@ export class SitemapService {
       'amahanga',
       'ibidukikije',
       'ibikunzwe',
-      'ubucukuzi-bw-amabuye-yagaciro',
+      'mine-na-kariyeri',
       'utuntu-n-undi',
       'ubukungu',
       'ubuzima',

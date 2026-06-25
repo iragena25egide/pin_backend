@@ -9,6 +9,7 @@ import { Ad } from './entities/ad.entity';
 import { Like } from './entities/like.entity';
 import { Subscriber } from './entities/subscriber.entity';
 import { ContactMessage } from './entities/contact-message.entity';
+import { AnalyticsEvent } from './entities/analytics-event.entity';
 
 // Load .env variables
 dotenv.config();
@@ -39,9 +40,9 @@ export const AppDataSource = new DataSource({
   synchronize: false, // NEVER use true in production
   logging: !isProduction,
 
-  entities: [User, Post, Video, Comment, Ad, Like, Subscriber, ContactMessage],
+  entities: [User, Post, Video, Comment, Ad, Like, Subscriber, ContactMessage, AnalyticsEvent],
 
-  migrations: ['dist/migrations/*{.js}'],
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
 
   subscribers: [],
 });

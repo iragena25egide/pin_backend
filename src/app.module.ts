@@ -25,6 +25,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { UploadsModule } from './uploads/uploads.module';
 import { SitemapModule } from './sitemap/sitemap.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { AnalyticsModule } from './analytics/analytics.module';
+import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { join } from 'path';
 
 @Module({
@@ -49,6 +51,7 @@ import { join } from 'path';
       Like,
       Subscriber,
       ContactMessage,
+      AnalyticsEvent,
     ]),
     PostsModule,
     AuthModule,
@@ -61,6 +64,7 @@ import { join } from 'path';
     SubscribersModule,
     UploadsModule,
     SitemapModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
