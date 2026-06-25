@@ -124,6 +124,11 @@ export class PostsService {
     if (!item) {
       throw new NotFoundException("Post with slug " + slug + " not found");
     }
+    // Increment the view count in the database
+    await this.repo.increment({ id: item.id }, 'views', 1);
+    // Update the local object so the response reflects the new count
+    item.views = (item.views || 0) + 1;
+    
     return this.processPostLanguage(item);
   }
 
