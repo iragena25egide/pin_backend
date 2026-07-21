@@ -32,7 +32,10 @@ const contact_messages_module_1 = require("./contact-messages/contact-messages.m
 const subscribers_module_1 = require("./subscribers/subscribers.module");
 const throttler_1 = require("@nestjs/throttler");
 const uploads_module_1 = require("./uploads/uploads.module");
+const sitemap_module_1 = require("./sitemap/sitemap.module");
 const serve_static_1 = require("@nestjs/serve-static");
+const analytics_module_1 = require("./analytics/analytics.module");
+const analytics_event_entity_1 = require("./entities/analytics-event.entity");
 const path_1 = require("path");
 let AppModule = class AppModule {
 };
@@ -60,6 +63,7 @@ exports.AppModule = AppModule = __decorate([
                 like_entity_1.Like,
                 subscriber_entity_1.Subscriber,
                 contact_message_entity_1.ContactMessage,
+                analytics_event_entity_1.AnalyticsEvent,
             ]),
             posts_module_1.PostsModule,
             auth_module_1.AuthModule,
@@ -71,6 +75,8 @@ exports.AppModule = AppModule = __decorate([
             contact_messages_module_1.ContactMessagesModule,
             subscribers_module_1.SubscribersModule,
             uploads_module_1.UploadsModule,
+            sitemap_module_1.SitemapModule,
+            analytics_module_1.AnalyticsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

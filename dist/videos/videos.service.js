@@ -26,7 +26,11 @@ let VideosService = class VideosService {
         return this.repo.save(item);
     }
     findAll() {
-        return this.repo.find();
+        return this.repo.find({
+            order: {
+                created_at: 'DESC'
+            }
+        });
     }
     async findOne(id) {
         const item = await this.repo.findOneBy({ id });
@@ -77,7 +81,8 @@ let VideosService = class VideosService {
                             slug: slug,
                             thumbnail: snippet.thumbnails?.high?.url || snippet.thumbnails?.default?.url,
                             type: 'youtube',
-                            category: 'YouTube Sync'
+                            category: 'YouTube Sync',
+                            created_at: new Date(snippet.publishedAt)
                         });
                         await this.repo.save(newVideo);
                         addedCount++;

@@ -7,4 +7,5 @@ export declare class CreatePostDto {
     is_featured?: boolean;
     slug?: string;
     author?: string;
+    language?: string;
 }

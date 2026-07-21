@@ -32,62 +32,139 @@ let PostsService = class PostsService {
         }
         return [];
     }
+    detectLanguage(title, content) {
+        const rwWords = [
+            'umunsi', 'abantu', 'kugira', 'ubucukuzi', 'amabuye', 'yagaciro', 'gaciro', 'rwanda', 'kigali', 'kinyarwanda',
+            'umugore', 'umugabo', 'umwana', 'igihugu', 'amazi', 'umuriro', 'ijambo', 'mu', 'na', 'ku', 'ya', 'wa', 'za',
+            'ko', 'neza', 'rwose', 'hari', 'uri', 'uyu', 'iyo', 'niba', 'kuko', 'kandi', 'ariko', 'kora', 'vuga', 'se',
+            'ngo', 'he', 'aho', 'reba'
+        ];
+        const contentLower = ((title || '') + ' ' + (content || '')).toLowerCase();
+        let rwCount = 0;
+        for (const word of rwWords) {
+            const regex = new RegExp(`\\b${word}\\b`, 'i');
+            if (regex.test(contentLower)) {
+                rwCount++;
+            }
+        }
+        const enWords = ['the', 'and', 'this', 'that', 'with', 'from', 'have', 'been', 'were', 'will', 'would', 'about'];
+        let enCount = 0;
+        for (const word of enWords) {
+            const regex = new RegExp(`\\b${word}\\b`, 'i');
+            if (regex.test(contentLower)) {
+                enCount++;
+            }
+        }
+        return rwCount >= enCount ? 'rw' : 'en';
+    }
+    processPostLanguage(post) {
+        if (!post)
+            return post;
+        let lang = 'rw';
+        if (post.category && Array.isArray(post.category)) {
+            const enIndex = post.category.indexOf('lang:en');
+            const rwIndex = post.category.indexOf('lang:rw');
+            if (enIndex !== -1) {
+                lang = 'en';
+            }
+            else if (rwIndex !== -1) {
+                lang = 'rw';
+            }
+            post.category = post.category.filter(c => c !== 'lang:en' && c !== 'lang:rw');
+        }
+        post.language = lang;
+        return post;
+    }
     async create(createDto) {
+        const lang = createDto.language || this.detectLanguage(createDto.title || '', createDto.content || '');
+        const categoryArray = this.normalizeCategory(createDto.category);
+        const filteredCategories = categoryArray.filter(c => c !== 'lang:en' && c !== 'lang:rw');
+        filteredCategories.push(`lang:${lang}`);
         const normalized = {
             ...createDto,
-            category: this.normalizeCategory(createDto.category),
+            category: filteredCategories,
         };
         const item = this.repo.create(normalized);
-        return this.repo.save(item);
+        const saved = await this.repo.save(item);
+        return this.processPostLanguage(saved);
     }
-    async findAll(category) {
+    async findAll(category, language) {
+        const queryBuilder = this.repo.createQueryBuilder("post");
         if (category) {
-            return this.repo.createQueryBuilder("post")
-                .where("post.category ILIKE :category", { category: `%${category}%` })
-                .orderBy("post.created_at", "DESC")
-                .getMany();
+            queryBuilder.andWhere("post.category ILIKE :category", { category: `%${category}%` });
         }
-        return this.repo.find({
-            order: {
-                created_at: "DESC"
+        if (language) {
+            if (language === 'en') {
+                queryBuilder.andWhere("post.category LIKE :langPattern", { langPattern: '%lang:en%' });
             }
-        });
+            else if (language === 'rw') {
+                queryBuilder.andWhere("(post.category NOT LIKE :langPattern OR post.category IS NULL)", { langPattern: '%lang:en%' });
+            }
+        }
+        const posts = await queryBuilder
+            .orderBy("post.created_at", "DESC")
+            .getMany();
+        return posts.map(post => this.processPostLanguage(post));
     }
     async findOne(id) {
         const item = await this.repo.findOneBy({ id });
         if (!item) {
             throw new common_1.NotFoundException("Post with ID " + id + " not found");
         }
-        return item;
+        return this.processPostLanguage(item);
     }
     async findBySlug(slug) {
         const item = await this.repo.findOneBy({ slug });
         if (!item) {
             throw new common_1.NotFoundException("Post with slug " + slug + " not found");
         }
-        return item;
+        return this.processPostLanguage(item);
     }
     async update(id, updateDto) {
-        const item = await this.findOne(id);
+        const item = await this.repo.findOneBy({ id });
+        if (!item) {
+            throw new common_1.NotFoundException("Post with ID " + id + " not found");
+        }
+        let lang = updateDto.language;
+        if (!lang) {
+            const processedExisting = this.processPostLanguage({ ...item });
+            lang = processedExisting.language;
+        }
+        let updatedCategories = undefined;
+        if (updateDto.category !== undefined) {
+            const categoryArray = this.normalizeCategory(updateDto.category);
+            updatedCategories = categoryArray.filter(c => c !== 'lang:en' && c !== 'lang:rw');
+            updatedCategories.push(`lang:${lang}`);
+        }
+        else if (updateDto.language !== undefined) {
+            const categoryArray = this.normalizeCategory(item.category);
+            updatedCategories = categoryArray.filter(c => c !== 'lang:en' && c !== 'lang:rw');
+            updatedCategories.push(`lang:${lang}`);
+        }
         const normalized = {
             ...updateDto,
-            category: updateDto.category !== undefined ? this.normalizeCategory(updateDto.category) : undefined,
+            category: updatedCategories,
         };
         const updated = this.repo.merge(item, normalized);
-        return this.repo.save(updated);
+        const saved = await this.repo.save(updated);
+        return this.processPostLanguage(saved);
     }
     async remove(id) {
-        const item = await this.findOne(id);
+        const item = await this.repo.findOneBy({ id });
+        if (!item) {
+            throw new common_1.NotFoundException("Post with ID " + id + " not found");
+        }
         await this.repo.remove(item);
     }
     async search(query) {
         if (!query)
             return [];
-        return this.repo.createQueryBuilder("post")
+        const posts = await this.repo.createQueryBuilder("post")
             .where("post.title ILIKE :query", { query: `%${query}%` })
             .orWhere("post.content ILIKE :query", { query: `%${query}%` })
             .orderBy("post.created_at", "DESC")
             .getMany();
+        return posts.map(post => this.processPostLanguage(post));
     }
 };
 exports.PostsService = PostsService;

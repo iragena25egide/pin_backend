@@ -11,4 +11,5 @@ export declare class Post {
     is_sponsored: boolean;
     is_featured: boolean;
     created_at: Date;
+    language?: string;
 }

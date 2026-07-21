@@ -44,6 +44,7 @@ const ad_entity_1 = require("./entities/ad.entity");
 const like_entity_1 = require("./entities/like.entity");
 const subscriber_entity_1 = require("./entities/subscriber.entity");
 const contact_message_entity_1 = require("./entities/contact-message.entity");
+const analytics_event_entity_1 = require("./entities/analytics-event.entity");
 dotenv.config();
 const isProduction = process.env.NODE_ENV === 'production';
 const useUrl = !!process.env.DATABASE_URL;
@@ -60,12 +61,10 @@ exports.AppDataSource = new typeorm_1.DataSource({
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         }),
-    ssl: useUrl
-        ? { rejectUnauthorized: false }
-        : false,
+    ssl: useUrl ? { rejectUnauthorized: false } : false,
     synchronize: false,
     logging: !isProduction,
-    entities: [user_entity_1.User, post_entity_1.Post, video_entity_1.Video, comment_entity_1.Comment, ad_entity_1.Ad, like_entity_1.Like, subscriber_entity_1.Subscriber, contact_message_entity_1.ContactMessage],
+    entities: [user_entity_1.User, post_entity_1.Post, video_entity_1.Video, comment_entity_1.Comment, ad_entity_1.Ad, like_entity_1.Like, subscriber_entity_1.Subscriber, contact_message_entity_1.ContactMessage, analytics_event_entity_1.AnalyticsEvent],
     migrations: ['dist/migrations/*{.js}'],
     subscribers: [],
 });
