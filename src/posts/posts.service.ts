@@ -105,6 +105,20 @@ export class PostsService {
     }
 
     const posts = await queryBuilder
+      .select([
+        "post.id",
+        "post.title",
+        "post.slug",
+        "post.excerpt",
+        "post.author",
+        "post.image",
+        "post.category",
+        "post.views",
+        "post.is_sponsored",
+        "post.is_featured",
+        "post.created_at",
+        "post.language"
+      ])
       .orderBy("post.created_at", "DESC")
       .getMany();
 
@@ -176,6 +190,20 @@ export class PostsService {
   async search(query: string): Promise<Post[]> {
     if (!query) return [];
     const posts = await this.repo.createQueryBuilder("post")
+      .select([
+        "post.id",
+        "post.title",
+        "post.slug",
+        "post.excerpt",
+        "post.author",
+        "post.image",
+        "post.category",
+        "post.views",
+        "post.is_sponsored",
+        "post.is_featured",
+        "post.created_at",
+        "post.language"
+      ])
       .where("post.title ILIKE :query", { query: `%${query}%` })
       .orWhere("post.content ILIKE :query", { query: `%${query}%` })
       .orderBy("post.created_at", "DESC")
