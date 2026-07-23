@@ -26,8 +26,8 @@ let AnalyticsController = class AnalyticsController {
             ip_address,
         });
     }
-    async getDashboard() {
-        return this.analyticsService.getDashboardStats();
+    async getDashboard(date) {
+        return this.analyticsService.getDashboardStats(date);
     }
 };
 exports.AnalyticsController = AnalyticsController;
@@ -41,8 +41,9 @@ __decorate([
 ], AnalyticsController.prototype, "trackEvent", null);
 __decorate([
     (0, common_1.Get)('dashboard'),
+    __param(0, (0, common_1.Query)('date')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AnalyticsController.prototype, "getDashboard", null);
 exports.AnalyticsController = AnalyticsController = __decorate([

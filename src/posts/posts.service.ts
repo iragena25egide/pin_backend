@@ -116,8 +116,7 @@ export class PostsService {
         "post.views",
         "post.is_sponsored",
         "post.is_featured",
-        "post.created_at",
-        "post.language"
+        "post.created_at"
       ])
       .orderBy("post.created_at", "DESC")
       .getMany();
@@ -201,8 +200,7 @@ export class PostsService {
         "post.views",
         "post.is_sponsored",
         "post.is_featured",
-        "post.created_at",
-        "post.language"
+        "post.created_at"
       ])
       .where("post.title ILIKE :query", { query: `%${query}%` })
       .orWhere("post.content ILIKE :query", { query: `%${query}%` })

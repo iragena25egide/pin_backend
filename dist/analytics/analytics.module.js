@@ -12,12 +12,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const analytics_controller_1 = require("./analytics.controller");
 const analytics_service_1 = require("./analytics.service");
 const analytics_event_entity_1 = require("../entities/analytics-event.entity");
+const post_entity_1 = require("../entities/post.entity");
 let AnalyticsModule = class AnalyticsModule {
 };
 exports.AnalyticsModule = AnalyticsModule;
 exports.AnalyticsModule = AnalyticsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([analytics_event_entity_1.AnalyticsEvent])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([analytics_event_entity_1.AnalyticsEvent, post_entity_1.Post])],
         controllers: [analytics_controller_1.AnalyticsController],
         providers: [analytics_service_1.AnalyticsService],
         exports: [analytics_service_1.AnalyticsService],

@@ -8,5 +8,5 @@ export declare class AnalyticsController {
         payload?: any;
         visitor_id?: string;
     }, req: Request): Promise<import("../entities/analytics-event.entity").AnalyticsEvent>;
-    getDashboard(): Promise<any>;
+    getDashboard(date?: string): Promise<any>;
 }

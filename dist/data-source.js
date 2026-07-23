@@ -65,7 +65,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     synchronize: false,
     logging: !isProduction,
     entities: [user_entity_1.User, post_entity_1.Post, video_entity_1.Video, comment_entity_1.Comment, ad_entity_1.Ad, like_entity_1.Like, subscriber_entity_1.Subscriber, contact_message_entity_1.ContactMessage, analytics_event_entity_1.AnalyticsEvent],
-    migrations: ['dist/migrations/*{.js}'],
+    migrations: [__dirname + '/migrations/*{.ts,.js}'],
     subscribers: [],
 });
 //# sourceMappingURL=data-source.js.map

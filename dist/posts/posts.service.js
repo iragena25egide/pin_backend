@@ -102,6 +102,19 @@ let PostsService = class PostsService {
             }
         }
         const posts = await queryBuilder
+            .select([
+            "post.id",
+            "post.title",
+            "post.slug",
+            "post.excerpt",
+            "post.author",
+            "post.image",
+            "post.category",
+            "post.views",
+            "post.is_sponsored",
+            "post.is_featured",
+            "post.created_at"
+        ])
             .orderBy("post.created_at", "DESC")
             .getMany();
         return posts.map(post => this.processPostLanguage(post));
@@ -118,6 +131,8 @@ let PostsService = class PostsService {
         if (!item) {
             throw new common_1.NotFoundException("Post with slug " + slug + " not found");
         }
+        await this.repo.increment({ id: item.id }, 'views', 1);
+        item.views = (item.views || 0) + 1;
         return this.processPostLanguage(item);
     }
     async update(id, updateDto) {
@@ -160,6 +175,19 @@ let PostsService = class PostsService {
         if (!query)
             return [];
         const posts = await this.repo.createQueryBuilder("post")
+            .select([
+            "post.id",
+            "post.title",
+            "post.slug",
+            "post.excerpt",
+            "post.author",
+            "post.image",
+            "post.category",
+            "post.views",
+            "post.is_sponsored",
+            "post.is_featured",
+            "post.created_at"
+        ])
             .where("post.title ILIKE :query", { query: `%${query}%` })
             .orWhere("post.content ILIKE :query", { query: `%${query}%` })
             .orderBy("post.created_at", "DESC")
