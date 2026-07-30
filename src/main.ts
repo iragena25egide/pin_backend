@@ -30,6 +30,7 @@ async function bootstrap() {
     'https://pinrwanda.netlify.app',
     'https://pinrwanda.com',
     'https://www.pinrwanda.com',
+    'https://admin.pinrwanda.com',
     'http://localhost:3000',
     'http://localhost:3001',
   ];
