@@ -37,6 +37,11 @@ export const AppDataSource = new DataSource({
   // uselibpqcompat=true in the DATABASE_URL handles the sslmode behaviour
   ssl: useUrl ? { rejectUnauthorized: false } : false,
 
+  // Limit connection pool to prevent max connection errors on free tier databases (e.g. Railway)
+  extra: {
+    max: 5,
+  },
+
   synchronize: false, // NEVER use true in production
   logging: !isProduction,
 
