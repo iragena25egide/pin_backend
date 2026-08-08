@@ -38,8 +38,10 @@ export const AppDataSource = new DataSource({
   ssl: useUrl ? { rejectUnauthorized: false } : false,
 
   // Limit connection pool to prevent max connection errors on free tier databases (e.g. Railway)
+  // Also pass ssl config deeply to the underlying pg driver
   extra: {
     max: 5,
+    ssl: useUrl ? { rejectUnauthorized: false } : false,
   },
 
   synchronize: false, // NEVER use true in production
