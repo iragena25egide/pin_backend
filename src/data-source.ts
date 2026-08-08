@@ -17,7 +17,7 @@ dotenv.config();
 const isProduction = process.env.NODE_ENV === 'production';
 const useUrl = !!process.env.DATABASE_URL;
 // Strip sslmode from the URL so it doesn't override our manual ssl config
-const safeDbUrl = useUrl ? process.env.DATABASE_URL.replace(/\?sslmode=.*$/, '') : '';
+const safeDbUrl = useUrl ? (process.env.DATABASE_URL || '').replace(/\?sslmode=.*$/, '') : '';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
