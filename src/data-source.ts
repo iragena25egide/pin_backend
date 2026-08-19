@@ -44,6 +44,10 @@ export const AppDataSource = new DataSource({
   extra: {
     max: 5,
     ssl: useUrl ? { rejectUnauthorized: false } : false,
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 10000, // 10 seconds
+    idleTimeoutMillis: 30000, // 30 seconds
+    connectionTimeoutMillis: 10000, // 10 seconds
   },
 
   synchronize: false, // NEVER use true in production

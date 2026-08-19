@@ -41,7 +41,12 @@ import { join } from 'path';
         limit: 10,
       },
     ]),
-    TypeOrmModule.forRoot(AppDataSource.options),
+    TypeOrmModule.forRoot({
+      ...AppDataSource.options,
+      autoLoadEntities: true,
+      retryAttempts: 20, // Wait longer for Railway serverless DB to wake up
+      retryDelay: 3000,
+    }),
     TypeOrmModule.forFeature([
       User,
       Post,
