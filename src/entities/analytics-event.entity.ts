@@ -11,16 +11,16 @@ export class AnalyticsEvent {
   id: number;
 
   @Column()
-  event_type: string; // e.g., 'page_view', 'story_click'
+  event_type: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  payload?: any; // e.g., { storyId: 123, path: '/story/my-story' }
+  payload?: any;
 
   @Column({ nullable: true })
-  visitor_id?: string; // UUID to identify unique visitors anonymously
+  visitor_id?: string;
 
   @Column({ nullable: true })
-  ip_address?: string; // Optional: store IP address if needed
+  ip_address?: string;
 
   @CreateDateColumn()
   created_at: Date;
