@@ -36,7 +36,9 @@ const sitemap_module_1 = require("./sitemap/sitemap.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const analytics_module_1 = require("./analytics/analytics.module");
 const analytics_event_entity_1 = require("./entities/analytics-event.entity");
+const announcement_entity_1 = require("./entities/announcement.entity");
 const path_1 = require("path");
+const announcements_module_1 = require("./announcements/announcements.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -53,7 +55,12 @@ exports.AppModule = AppModule = __decorate([
                     limit: 10,
                 },
             ]),
-            typeorm_1.TypeOrmModule.forRoot(data_source_1.AppDataSource.options),
+            typeorm_1.TypeOrmModule.forRoot({
+                ...data_source_1.AppDataSource.options,
+                autoLoadEntities: true,
+                retryAttempts: 20,
+                retryDelay: 3000,
+            }),
             typeorm_1.TypeOrmModule.forFeature([
                 user_entity_1.User,
                 post_entity_1.Post,
@@ -64,6 +71,7 @@ exports.AppModule = AppModule = __decorate([
                 subscriber_entity_1.Subscriber,
                 contact_message_entity_1.ContactMessage,
                 analytics_event_entity_1.AnalyticsEvent,
+                announcement_entity_1.Announcement,
             ]),
             posts_module_1.PostsModule,
             auth_module_1.AuthModule,
@@ -77,6 +85,7 @@ exports.AppModule = AppModule = __decorate([
             uploads_module_1.UploadsModule,
             sitemap_module_1.SitemapModule,
             analytics_module_1.AnalyticsModule,
+            announcements_module_1.AnnouncementsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

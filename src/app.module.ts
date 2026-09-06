@@ -27,7 +27,9 @@ import { SitemapModule } from './sitemap/sitemap.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
+import { Announcement } from "./entities/announcement.entity";
 import { join } from 'path';
+import { AnnouncementsModule } from './announcements/announcements.module';
 
 @Module({
   imports: [
@@ -57,6 +59,7 @@ import { join } from 'path';
       Subscriber,
       ContactMessage,
       AnalyticsEvent,
+      Announcement,
     ]),
     PostsModule,
     AuthModule,
@@ -70,6 +73,7 @@ import { join } from 'path';
     UploadsModule,
     SitemapModule,
     AnalyticsModule,
+    AnnouncementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

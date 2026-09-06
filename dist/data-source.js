@@ -48,11 +48,12 @@ const analytics_event_entity_1 = require("./entities/analytics-event.entity");
 dotenv.config();
 const isProduction = process.env.NODE_ENV === 'production';
 const useUrl = !!process.env.DATABASE_URL;
+const safeDbUrl = useUrl ? (process.env.DATABASE_URL || '').replace(/\?sslmode=.*$/, '') : '';
 exports.AppDataSource = new typeorm_1.DataSource({
     type: 'postgres',
     ...(useUrl
         ? {
-            url: process.env.DATABASE_URL,
+            url: safeDbUrl,
         }
         : {
             host: process.env.DB_HOST || 'localhost',
@@ -62,6 +63,14 @@ exports.AppDataSource = new typeorm_1.DataSource({
             database: process.env.DB_NAME,
         }),
     ssl: useUrl ? { rejectUnauthorized: false } : false,
+    extra: {
+        max: 5,
+        ssl: useUrl ? { rejectUnauthorized: false } : false,
+        keepAlive: true,
+        keepAliveInitialDelayMillis: 10000,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 10000,
+    },
     synchronize: false,
     logging: !isProduction,
     entities: [user_entity_1.User, post_entity_1.Post, video_entity_1.Video, comment_entity_1.Comment, ad_entity_1.Ad, like_entity_1.Like, subscriber_entity_1.Subscriber, contact_message_entity_1.ContactMessage, analytics_event_entity_1.AnalyticsEvent],
