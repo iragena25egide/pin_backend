@@ -67,6 +67,7 @@ let UploadsController = class UploadsController {
                 });
                 const uploadResult = await cloudinary_1.v2.uploader.upload(file.path, {
                     folder: 'pin_rwanda',
+                    resource_type: 'auto',
                 });
                 try {
                     fs.unlinkSync(file.path);

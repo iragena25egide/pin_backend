@@ -37,6 +37,7 @@ export class UploadsController {
 
         const uploadResult = await cloudinary.uploader.upload(file.path, {
           folder: 'pin_rwanda',
+          resource_type: 'auto',
         });
 
         // Clean up local temporary file
