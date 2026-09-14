@@ -12,7 +12,7 @@ export class AnnouncementsController {
   }
 
   @Get(':slug')
-  findOne(@Param('slug') slug: string): Promise<Announcement> {
+  findOne(@Param('slug') slug: string): Promise<Announcement | null> {
     return this.announcementsService.findOne(slug);
   }
 
@@ -22,7 +22,7 @@ export class AnnouncementsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateData: Partial<Announcement>): Promise<Announcement> {
+  update(@Param('id') id: string, @Body() updateData: Partial<Announcement>): Promise<Announcement | null> {
     return this.announcementsService.update(+id, updateData);
   }
 

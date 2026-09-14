@@ -14,7 +14,7 @@ export class AnnouncementsService {
     return this.announcementsRepository.find({ order: { created_at: 'DESC' } });
   }
 
-  findOne(slug: string): Promise<Announcement> {
+  findOne(slug: string): Promise<Announcement | null> {
     return this.announcementsRepository.findOneBy({ slug });
   }
 
@@ -23,7 +23,7 @@ export class AnnouncementsService {
     return this.announcementsRepository.save(announcement);
   }
 
-  async update(id: number, updateData: Partial<Announcement>): Promise<Announcement> {
+  async update(id: number, updateData: Partial<Announcement>): Promise<Announcement | null> {
     await this.announcementsRepository.update(id, updateData);
     return this.announcementsRepository.findOneBy({ id });
   }
