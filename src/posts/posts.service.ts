@@ -89,7 +89,7 @@ export class PostsService {
     return this.processPostLanguage(saved);
   }
 
-  async findAll(category?: string, language?: string): Promise<Post[]> {
+  async findAll(category?: string, language?: string, limit?: number, sort?: string): Promise<Post[]> {
     const queryBuilder = this.repo.createQueryBuilder("post");
 
     if (category) {
@@ -102,6 +102,16 @@ export class PostsService {
       } else if (language === 'rw') {
         queryBuilder.andWhere("(post.category NOT LIKE :langPattern OR post.category IS NULL)", { langPattern: '%lang:en%' });
       }
+    }
+
+    if (sort === 'popular') {
+      queryBuilder.orderBy("post.views", "DESC").addOrderBy("post.created_at", "DESC");
+    } else {
+      queryBuilder.orderBy("post.created_at", "DESC");
+    }
+
+    if (limit && limit > 0) {
+      queryBuilder.take(limit);
     }
 
     const posts = await queryBuilder
@@ -118,7 +128,6 @@ export class PostsService {
         "post.is_featured",
         "post.created_at"
       ])
-      .orderBy("post.created_at", "DESC")
       .getMany();
 
     return posts.map(post => this.processPostLanguage(post));
@@ -137,9 +146,10 @@ export class PostsService {
     if (!item) {
       throw new NotFoundException("Post with slug " + slug + " not found");
     }
-    // Increment the view count in the database
-    await this.repo.increment({ id: item.id }, 'views', 1);
-    // Update the local object so the response reflects the new count
+    // Increment the view count asynchronously (non-blocking fire-and-forget)
+    this.repo.increment({ id: item.id }, 'views', 1).catch(err => {
+      console.error("Failed to increment post views:", err);
+    });
     item.views = (item.views || 0) + 1;
     
     return this.processPostLanguage(item);

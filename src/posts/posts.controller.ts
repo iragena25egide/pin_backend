@@ -18,8 +18,10 @@ export class PostsController {
   findAll(
     @Query("category") category?: string,
     @Query("language") language?: string,
+    @Query("limit") limit?: string,
+    @Query("sort") sort?: string,
   ) {
-    return this.service.findAll(category, language);
+    return this.service.findAll(category, language, limit ? parseInt(limit, 10) : undefined, sort);
   }
 
   @Get("slug/:slug")

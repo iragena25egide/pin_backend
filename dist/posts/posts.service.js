@@ -88,7 +88,7 @@ let PostsService = class PostsService {
         const saved = await this.repo.save(item);
         return this.processPostLanguage(saved);
     }
-    async findAll(category, language) {
+    async findAll(category, language, limit, sort) {
         const queryBuilder = this.repo.createQueryBuilder("post");
         if (category) {
             queryBuilder.andWhere("post.category ILIKE :category", { category: `%${category}%` });
@@ -100,6 +100,15 @@ let PostsService = class PostsService {
             else if (language === 'rw') {
                 queryBuilder.andWhere("(post.category NOT LIKE :langPattern OR post.category IS NULL)", { langPattern: '%lang:en%' });
             }
+        }
+        if (sort === 'popular') {
+            queryBuilder.orderBy("post.views", "DESC").addOrderBy("post.created_at", "DESC");
+        }
+        else {
+            queryBuilder.orderBy("post.created_at", "DESC");
+        }
+        if (limit && limit > 0) {
+            queryBuilder.take(limit);
         }
         const posts = await queryBuilder
             .select([
@@ -115,7 +124,6 @@ let PostsService = class PostsService {
             "post.is_featured",
             "post.created_at"
         ])
-            .orderBy("post.created_at", "DESC")
             .getMany();
         return posts.map(post => this.processPostLanguage(post));
     }
@@ -131,7 +139,9 @@ let PostsService = class PostsService {
         if (!item) {
             throw new common_1.NotFoundException("Post with slug " + slug + " not found");
         }
-        await this.repo.increment({ id: item.id }, 'views', 1);
+        this.repo.increment({ id: item.id }, 'views', 1).catch(err => {
+            console.error("Failed to increment post views:", err);
+        });
         item.views = (item.views || 0) + 1;
         return this.processPostLanguage(item);
     }

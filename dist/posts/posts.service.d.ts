@@ -9,7 +9,7 @@ export declare class PostsService {
     private detectLanguage;
     private processPostLanguage;
     create(createDto: CreatePostDto): Promise<Post>;
-    findAll(category?: string, language?: string): Promise<Post[]>;
+    findAll(category?: string, language?: string, limit?: number, sort?: string): Promise<Post[]>;
     findOne(id: number): Promise<Post>;
     findBySlug(slug: string): Promise<Post>;
     update(id: number, updateDto: UpdatePostDto): Promise<Post>;

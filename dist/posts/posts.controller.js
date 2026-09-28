@@ -25,8 +25,8 @@ let PostsController = class PostsController {
     create(createDto) {
         return this.service.create(createDto);
     }
-    findAll(category, language) {
-        return this.service.findAll(category, language);
+    findAll(category, language, limit, sort) {
+        return this.service.findAll(category, language, limit ? parseInt(limit, 10) : undefined, sort);
     }
     findBySlug(slug) {
         return this.service.findBySlug(slug);
@@ -57,8 +57,10 @@ __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)("category")),
     __param(1, (0, common_1.Query)("language")),
+    __param(2, (0, common_1.Query)("limit")),
+    __param(3, (0, common_1.Query)("sort")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findAll", null);
 __decorate([

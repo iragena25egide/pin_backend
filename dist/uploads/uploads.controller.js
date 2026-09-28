@@ -81,6 +81,18 @@ let UploadsController = class UploadsController {
                 console.error('Cloudinary upload failed, falling back to local storage:', err);
             }
         }
+        try {
+            const sharp = require('sharp');
+            const tempPath = `${file.path}.tmp`;
+            await sharp(file.path)
+                .resize({ width: 1200, height: 630, fit: 'inside', withoutEnlargement: true })
+                .jpeg({ quality: 80, progressive: true })
+                .toFile(tempPath);
+            fs.renameSync(tempPath, file.path);
+        }
+        catch (sharpErr) {
+            console.error('Sharp image compression skipped or failed:', sharpErr);
+        }
         const protocol = req.protocol;
         const host = req.get('host');
         const baseUrl = process.env.APP_URL || `${protocol}://${host}`;
