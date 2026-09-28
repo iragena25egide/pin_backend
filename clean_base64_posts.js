@@ -20,7 +20,7 @@ async function cleanBase64Posts() {
   await client.connect();
   console.log('Connected to database to clean base64 images from post contents...');
 
-  const res = await client.query("SELECT id, title, slug, content FROM post WHERE content LIKE '%data:image/%'");
+  const res = await client.query("SELECT id, title, slug, content FROM posts WHERE content LIKE '%data:image/%'");
   console.log(`Found ${res.rows.length} posts with inline base64 images.`);
 
   for (const row of res.rows) {
@@ -61,7 +61,7 @@ async function cleanBase64Posts() {
     }
 
     if (modified) {
-      await client.query("UPDATE post SET content = $1 WHERE id = $2", [content, row.id]);
+      await client.query("UPDATE posts SET content = $1 WHERE id = $2", [content, row.id]);
       console.log(`Updated post #${row.id} ("${row.title}") with clean image URLs.`);
     }
   }
