@@ -75,13 +75,58 @@ let PostsService = class PostsService {
         post.language = lang;
         return post;
     }
+    async processBase64ContentImages(content) {
+        if (!content || !content.includes('data:image/'))
+            return content || '';
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            const sharp = require('sharp');
+            const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+            if (!fs.existsSync(uploadsDir)) {
+                fs.mkdirSync(uploadsDir, { recursive: true });
+            }
+            let sanitized = content;
+            const regex = /src=["'](data:image\/([a-zA-Z0-9]+);base64,([^"']+))["']/g;
+            let match;
+            const replacements = [];
+            while ((match = regex.exec(content)) !== null) {
+                const fullDataUri = match[1];
+                const base64Data = match[3];
+                try {
+                    const buffer = Buffer.from(base64Data, 'base64');
+                    const filename = `img_clean_${Date.now()}_${Math.floor(Math.random() * 1000)}.jpg`;
+                    const filePath = path.join(uploadsDir, filename);
+                    await sharp(buffer)
+                        .resize({ width: 1200, height: 800, fit: 'inside', withoutEnlargement: true })
+                        .jpeg({ quality: 80, progressive: true })
+                        .toFile(filePath);
+                    const imgUrl = `https://api.pinrwanda.com/uploads/${filename}`;
+                    replacements.push({ original: fullDataUri, replacement: imgUrl });
+                }
+                catch (err) {
+                    console.error("Failed to convert base64 image in post content:", err);
+                }
+            }
+            for (const r of replacements) {
+                sanitized = sanitized.replace(r.original, r.replacement);
+            }
+            return sanitized;
+        }
+        catch (err) {
+            console.error("Error processing base64 images in content:", err);
+            return content;
+        }
+    }
     async create(createDto) {
-        const lang = createDto.language || this.detectLanguage(createDto.title || '', createDto.content || '');
+        const cleanContent = await this.processBase64ContentImages(createDto.content);
+        const lang = createDto.language || this.detectLanguage(createDto.title || '', cleanContent || '');
         const categoryArray = this.normalizeCategory(createDto.category);
         const filteredCategories = categoryArray.filter(c => c !== 'lang:en' && c !== 'lang:rw');
         filteredCategories.push(`lang:${lang}`);
         const normalized = {
             ...createDto,
+            content: cleanContent,
             category: filteredCategories,
         };
         const item = this.repo.create(normalized);
@@ -165,6 +210,9 @@ let PostsService = class PostsService {
             const categoryArray = this.normalizeCategory(item.category);
             updatedCategories = categoryArray.filter(c => c !== 'lang:en' && c !== 'lang:rw');
             updatedCategories.push(`lang:${lang}`);
+        }
+        if (updateDto.content !== undefined) {
+            updateDto.content = await this.processBase64ContentImages(updateDto.content);
         }
         const normalized = {
             ...updateDto,

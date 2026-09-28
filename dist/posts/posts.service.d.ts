@@ -8,6 +8,7 @@ export declare class PostsService {
     private normalizeCategory;
     private detectLanguage;
     private processPostLanguage;
+    private processBase64ContentImages;
     create(createDto: CreatePostDto): Promise<Post>;
     findAll(category?: string, language?: string, limit?: number, sort?: string): Promise<Post[]>;
     findOne(id: number): Promise<Post>;
