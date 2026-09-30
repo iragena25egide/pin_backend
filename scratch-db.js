@@ -18,7 +18,7 @@ async function run() {
     await client.connect();
     console.log("Connected to database successfully!");
 
-    // Run the migration query
+
     const res = await client.query(`
       ALTER TABLE posts ADD COLUMN IF NOT EXISTS language VARCHAR(10) DEFAULT 'rw';
     `);
